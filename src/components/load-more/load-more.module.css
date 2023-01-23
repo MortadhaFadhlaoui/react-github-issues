@@ -1,0 +1,14 @@
+.wrapper {
+	display: flex;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	background-color: white;
+	font-weight: bold;
+	align-items: center;
+	justify-content: center;
+	border-radius: 10px;
+}
+
+.wrapper:hover {
+	cursor: pointer;
+}

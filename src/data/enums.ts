@@ -1,4 +1,4 @@
 export enum IssueState {
-	CLOSED,
-	OPEN,
+	CLOSED = 'CLOSED',
+	OPEN = 'OPEN',
 }

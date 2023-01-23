@@ -3,7 +3,7 @@ import { ApolloProvider } from '@apollo/client'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import App from './App'
-import client from './graphql/client'
+import { client } from './graphql/client'
 import reportWebVitals from './reportWebVitals'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)

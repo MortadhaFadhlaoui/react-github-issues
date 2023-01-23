@@ -11,6 +11,7 @@
 		"@types/node": "^16.18.11",
 		"@types/react": "^18.0.27",
 		"@types/react-dom": "^18.0.10",
+		"framer-motion": "^8.5.2",
 		"graphql": "^16.6.0",
 		"graphql-tag": "^2.12.6",
 		"react": "^18.2.0",

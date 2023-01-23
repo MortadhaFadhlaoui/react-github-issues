@@ -1,15 +1,9 @@
 import React from 'react'
 import './App.css'
-import Issues from './screens/issues-list'
+import { Issues } from './screens/issues'
 
 function App() {
-	return (
-		<div className="App">
-			<header className="App-header">
-				<Issues />
-			</header>
-		</div>
-	)
+	return <Issues />
 }
 
 export default App
