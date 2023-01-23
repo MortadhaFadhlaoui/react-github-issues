@@ -1,11 +1,10 @@
 import {
 	OperationVariables,
 	ApolloError,
-	NetworkStatus,
-	ApolloClient,
 	FetchMoreQueryOptions,
 	ApolloQueryResult,
 } from '@apollo/client'
+import { IssueState } from './enums'
 
 // Data Types Section
 export interface Issue {
@@ -13,9 +12,7 @@ export interface Issue {
 	author: IAuthor
 	title: string
 	body: string
-	closed: boolean
-	url: string
-	createdAt: string
+	state: IssueState
 }
 
 export interface IAuthor {
@@ -50,8 +47,6 @@ export interface IQueryResult<TData = unknown, TVariables = OperationVariables> 
 			) => TData
 		},
 	): Promise<ApolloQueryResult<TFetchData>>
-	networkStatus: NetworkStatus
-	client: ApolloClient<object>
 }
 
 interface Issues {

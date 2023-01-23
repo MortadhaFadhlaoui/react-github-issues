@@ -1,11 +1,9 @@
 import React, { ReactElement } from 'react'
 import styles from './filter.module.css'
 import { FilterProps } from './filter.props'
-import { capitalize, randomColor } from '../../utils/function'
+import { capitalize } from '../../utils/function'
 
-export const Filter = ({ title, isActive, onClick }: FilterProps): ReactElement => {
-	const borderColor = randomColor()
-
+export const Filter = ({ title, isActive, borderColor, onClick }: FilterProps): ReactElement => {
 	return (
 		<div className={styles.wrapper} onClick={onClick} style={{ backgroundColor: `${isActive ? 'lavender' : 'white'}` }}>
 			<div
