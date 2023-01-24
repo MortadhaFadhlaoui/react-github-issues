@@ -13,6 +13,7 @@ export interface Issue {
 	title: string
 	body: string
 	state: IssueState
+	__typename: string
 }
 
 export interface IAuthor {
@@ -23,19 +24,26 @@ export interface IComment {
 	body: string
 }
 
-export interface IssuesVars {
-	owner: string
-	name: string
+export interface PaginationVars {
 	first: number
 	after: string | null
 }
 
-// API Type Section
+export interface IssuesVars extends PaginationVars {
+	owner: string
+	name: string
+}
 
-export interface IQueryResult<TData = unknown, TVariables = OperationVariables> {
-	data?: TData | undefined
-	error?: ApolloError | undefined
-	loading: boolean
+export interface FilterIssuesVars extends IssuesVars, PaginationVars {
+	states: IssueState | null
+}
+
+export interface SearchIssuesVars extends PaginationVars {
+	searchQuery: string
+}
+
+// API Type Section
+export interface Pagination<TData = unknown, TVariables = OperationVariables> {
 	fetchMore<TFetchData = TData, TFetchVars = TVariables>(
 		fetchMoreOptions: FetchMoreQueryOptions<TFetchVars, TFetchData> & {
 			updateQuery?: (
@@ -48,20 +56,36 @@ export interface IQueryResult<TData = unknown, TVariables = OperationVariables> 
 		},
 	): Promise<ApolloQueryResult<TFetchData>>
 }
-
-interface Issues {
-	edges: {
-		node: Issue
-		cursor: string
-	}[]
-	pageInfo: {
-		hasNextPage: boolean
-		endCursor: string
+export interface SearchData {
+	search: {
+		nodes: Issue[]
+		pageInfo: {
+			endCursor: string
+			hasNextPage: boolean
+		}
 	}
 }
 
 export interface IssuesData {
 	repository: {
-		issues: Issues
+		issues: {
+			nodes: Issue[]
+			pageInfo: {
+				endCursor: string
+				hasNextPage: boolean
+			}
+		}
 	}
 }
+
+export interface IIssues {
+	error?: ApolloError | undefined
+	loading: boolean
+	issues: Issue[]
+	endCursor: string
+	hasNextPage: boolean
+}
+
+export interface GetList extends Pagination<IssuesData, FilterIssuesVars>, IIssues {}
+
+export interface SearchList extends Pagination<SearchData, SearchIssuesVars>, IIssues {}

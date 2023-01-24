@@ -1,3 +1,4 @@
 export interface SearchProps {
-	onChange: React.ChangeEventHandler
+	onChange: (value: string) => void
+	placeholder: string
 }

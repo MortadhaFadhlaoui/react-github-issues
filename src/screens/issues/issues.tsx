@@ -1,33 +1,63 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useState } from 'react'
 import { motion } from 'framer-motion'
 import { IssuesList } from './issues-list/issues-list'
-import { StatusFilter } from './status-filter/filter-status'
-import { Search } from '../../components/search/search'
+import { IssuesSearch } from './issues-search/issues-search'
 import { IssueState } from '../../data/enums'
+import { IssuesData } from '../../data/types'
 import { getIssues } from '../../services/issues'
-import { FACEBOOK, PAGE_NUMBER, REACT } from '../../utils/constants'
+import { REPO_OWNER, PAGE_NUMBER, REPO_NAME } from '../../utils/constants'
 
 export const Issues = (): ReactElement => {
-	const { loading, error, data, fetchMore } = getIssues({
-		owner: FACEBOOK,
-		name: REACT,
+	const [state, setState] = useState<IssueState | null>(null)
+	const [isSearching, setIsSearching] = useState(false)
+	const { loading, error, issues, endCursor, hasNextPage, fetchMore } = getIssues({
+		owner: REPO_OWNER,
+		name: REPO_NAME,
 		first: PAGE_NUMBER,
 		after: null,
+		states: state,
 	})
 
-	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-		console.log(e.target.value)
+	const handleSearch = (isSearching: boolean, state: IssueState | null) => {
+		setIsSearching(isSearching)
+		setState(state)
 	}
 
-	const handleFilter = (value: IssueState | null) => {
-		console.log(value)
+	const handleLoadMoreIssues = (endCursor: string) => {
+		fetchMore({
+			variables: {
+				first: PAGE_NUMBER,
+				after: endCursor || null,
+			},
+			updateQuery: (prev: IssuesData, { fetchMoreResult }: { fetchMoreResult?: IssuesData }) => {
+				if (!fetchMoreResult) return prev
+				return Object.assign({}, prev, {
+					repository: {
+						...prev.repository,
+						issues: {
+							...prev.repository.issues,
+							nodes: [...prev.repository.issues.nodes, ...fetchMoreResult.repository.issues.nodes],
+							pageInfo: fetchMoreResult.repository.issues.pageInfo,
+						},
+					},
+				})
+			},
+		})
 	}
 
 	return (
 		<motion.div>
-			<Search onChange={handleSearch} />
-			<StatusFilter onChange={handleFilter} />
-			<IssuesList loading={loading} error={error} data={data} fetchMore={fetchMore} />
+			<IssuesSearch state={state} onChange={handleSearch} />
+			{!isSearching && (
+				<IssuesList
+					issues={issues}
+					loading={loading}
+					error={error}
+					endCursor={endCursor}
+					hasNextPage={hasNextPage}
+					loadMore={handleLoadMoreIssues}
+				/>
+			)}
 		</motion.div>
 	)
 }
