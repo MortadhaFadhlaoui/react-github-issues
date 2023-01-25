@@ -1,32 +1,33 @@
-import {
-	OperationVariables,
-	ApolloError,
-	FetchMoreQueryOptions,
-	ApolloQueryResult,
-} from '@apollo/client'
+import { OperationVariables, ApolloError, FetchMoreQueryOptions, ApolloQueryResult } from '@apollo/client'
 import { IssueState } from './enums'
 
 // Data Types Section
 export interface Issue {
-	id: number
-	author: IAuthor
+	id: string
 	title: string
 	body: string
 	state: IssueState
-	__typename: string
+	createdAt: string
+	comments: Comment[]
+	author: Author
+	number: number
 }
 
-export interface IAuthor {
+export interface Author {
+	avatarUrl: string
 	login: string
 }
 
-export interface IComment {
+export interface Comment {
+	id: string
 	body: string
+	author: Author
+	createdAt: string
 }
 
 export interface PaginationVars {
-	first: number
-	after: string | null
+	last: number
+	before: string | null
 }
 
 export interface IssuesVars extends PaginationVars {
@@ -40,6 +41,10 @@ export interface FilterIssuesVars extends IssuesVars, PaginationVars {
 
 export interface SearchIssuesVars extends PaginationVars {
 	searchQuery: string
+}
+
+export interface IssueDetailVars extends IssuesVars {
+	number: number
 }
 
 // API Type Section
@@ -60,8 +65,8 @@ export interface SearchData {
 	search: {
 		nodes: Issue[]
 		pageInfo: {
-			endCursor: string
-			hasNextPage: boolean
+			startCursor: string
+			hasPreviousPage: boolean
 		}
 	}
 }
@@ -71,21 +76,49 @@ export interface IssuesData {
 		issues: {
 			nodes: Issue[]
 			pageInfo: {
-				endCursor: string
-				hasNextPage: boolean
+				startCursor: string
+				hasPreviousPage: boolean
 			}
 		}
 	}
 }
 
-export interface IIssues {
-	error?: ApolloError | undefined
-	loading: boolean
-	issues: Issue[]
-	endCursor: string
-	hasNextPage: boolean
+export interface IssueDetail {
+	repository: {
+		issue: {
+			id: string
+			createdAt: string
+			title: string
+			body: string
+			state: IssueState
+			author: Author
+			number: number
+			comments: {
+				nodes: Comment[]
+				pageInfo: {
+					startCursor: string
+					hasPreviousPage: boolean
+				}
+			}
+		}
+	}
 }
 
-export interface GetList extends Pagination<IssuesData, FilterIssuesVars>, IIssues {}
+export interface Results {
+	error?: ApolloError | undefined
+	loading: boolean
+	startCursor: string
+	hasPreviousPage: boolean
+}
 
-export interface SearchList extends Pagination<SearchData, SearchIssuesVars>, IIssues {}
+export interface IIssues extends Results {
+	issues: Issue[]
+}
+
+export interface GetListResults extends Pagination<IssuesData, FilterIssuesVars>, IIssues {}
+
+export interface IssueDetailResults extends Pagination<IssueDetail, FilterIssuesVars>, Results {
+	issue: Issue | null
+}
+
+export interface SearchListResults extends Pagination<SearchData, SearchIssuesVars>, IIssues {}

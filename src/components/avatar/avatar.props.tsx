@@ -1,10 +1,8 @@
 import { IssueState } from '../../data/enums'
 
-export interface CardProps {
-	title: string
-	src: string
+export interface AvatarProps {
 	name: string
+	src: string
 	date?: string
-	onClick?: () => void
 	status?: IssueState
 }

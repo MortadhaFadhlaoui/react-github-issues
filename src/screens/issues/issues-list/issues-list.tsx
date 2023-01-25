@@ -3,18 +3,22 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { IssuesListProps } from './issues-list.pops'
 import { Card } from '../../../components/card/card'
 import { LoadMore } from '../../../components/load-more/load-more'
-import { statusColor } from '../../../services/issues'
 
 export const IssuesList = ({
 	loading,
 	error,
 	issues,
 	loadMore,
-	hasNextPage,
-	endCursor,
+	hasPreviousPage,
+	startCursor,
+	onClick,
 }: IssuesListProps): ReactElement => {
 	const handleLoadMore = () => {
-		if (loadMore) loadMore(endCursor)
+		if (loadMore) loadMore(startCursor)
+	}
+
+	const handleOnClick = (number: number) => {
+		onClick(number)
 	}
 
 	if (loading) return <p>Loading...</p>
@@ -24,9 +28,19 @@ export const IssuesList = ({
 		<motion.div>
 			<AnimatePresence>
 				{issues.map(issue => {
-					return <Card key={issue.id} title={issue.title} borderColor={statusColor(issue.state)} />
+					return (
+						<Card
+							onClick={() => handleOnClick(issue.number)}
+							key={issue.id}
+							title={issue.title}
+							src={issue.author.avatarUrl}
+							name={issue.author.login}
+							date={issue.createdAt}
+							status={issue.state}
+						/>
+					)
 				})}
-				{loadMore && <LoadMore onClick={handleLoadMore} disabled={!hasNextPage} title={'Load More'} />}
+				<LoadMore onClick={handleLoadMore} disabled={!hasPreviousPage} title={'More Issues'} />
 			</AnimatePresence>
 		</motion.div>
 	)

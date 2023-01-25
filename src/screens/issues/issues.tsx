@@ -1,5 +1,6 @@
 import React, { ReactElement, useState } from 'react'
 import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 import { IssuesList } from './issues-list/issues-list'
 import { IssuesSearch } from './issues-search/issues-search'
 import { IssueState } from '../../data/enums'
@@ -7,14 +8,15 @@ import { IssuesData } from '../../data/types'
 import { getIssues } from '../../services/issues'
 import { REPO_OWNER, PAGE_NUMBER, REPO_NAME } from '../../utils/constants'
 
-export const Issues = (): ReactElement => {
+export const IssuesScreen = (): ReactElement => {
+	const navigate = useNavigate()
 	const [state, setState] = useState<IssueState | null>(null)
 	const [isSearching, setIsSearching] = useState(false)
-	const { loading, error, issues, endCursor, hasNextPage, fetchMore } = getIssues({
+	const { loading, error, issues, startCursor, hasPreviousPage, fetchMore } = getIssues({
 		owner: REPO_OWNER,
 		name: REPO_NAME,
-		first: PAGE_NUMBER,
-		after: null,
+		last: PAGE_NUMBER,
+		before: null,
 		states: state,
 	})
 
@@ -23,11 +25,11 @@ export const Issues = (): ReactElement => {
 		setState(state)
 	}
 
-	const handleLoadMoreIssues = (endCursor: string) => {
+	const handleLoadMoreIssues = (startCursor: string) => {
 		fetchMore({
 			variables: {
-				first: PAGE_NUMBER,
-				after: endCursor || null,
+				last: PAGE_NUMBER,
+				before: startCursor || null,
 			},
 			updateQuery: (prev: IssuesData, { fetchMoreResult }: { fetchMoreResult?: IssuesData }) => {
 				if (!fetchMoreResult) return prev
@@ -45,16 +47,21 @@ export const Issues = (): ReactElement => {
 		})
 	}
 
+	const handleOnClick = (number: number) => {
+		navigate(`/${number}`)
+	}
+
 	return (
 		<motion.div>
 			<IssuesSearch state={state} onChange={handleSearch} />
 			{!isSearching && (
 				<IssuesList
+					onClick={handleOnClick}
 					issues={issues}
 					loading={loading}
 					error={error}
-					endCursor={endCursor}
-					hasNextPage={hasNextPage}
+					startCursor={startCursor}
+					hasPreviousPage={hasPreviousPage}
 					loadMore={handleLoadMoreIssues}
 				/>
 			)}

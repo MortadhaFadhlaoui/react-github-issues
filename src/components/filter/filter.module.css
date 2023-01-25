@@ -1,8 +1,7 @@
 .wrapper {
 	display: flex;
-	padding: 10px 20px;
+	padding: 10px;
 	margin-bottom: 30px;
-	background-color: white;
 	align-items: center;
 	border-radius: 10px;
 	transition: transform 0.2s;

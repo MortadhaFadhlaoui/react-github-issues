@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 import { IssuesSearchProps } from './issues-search.props'
 import { Search } from '../../../components/search/search'
 import { IssueState } from '../../../data/enums'
@@ -11,13 +12,14 @@ import { IssuesFilter } from '../issues-filter/issues-filter'
 import { IssuesList } from '../issues-list/issues-list'
 
 export const IssuesSearch = ({ onChange }: IssuesSearchProps) => {
+	const navigate = useNavigate()
 	const [state, setState] = useState<IssueState | null>(null)
 	const [searchTerm, setSearchTerm] = useState<string>('')
 
-	const { loading, error, issues, endCursor, hasNextPage, fetchMore } = searchIssues({
+	const { loading, error, issues, startCursor, hasPreviousPage, fetchMore } = searchIssues({
 		searchQuery: searchQuery(REPO_OWNER, REPO_NAME, searchTerm, state),
-		first: PAGE_NUMBER,
-		after: null,
+		last: PAGE_NUMBER,
+		before: null,
 	})
 
 	const handleSearch = (value: string) => {
@@ -30,11 +32,11 @@ export const IssuesSearch = ({ onChange }: IssuesSearchProps) => {
 		setState(value)
 	}
 
-	const handleLoadMoreIssues = (endCursor: string) => {
+	const handleLoadMoreIssues = (startCursor: string) => {
 		fetchMore({
 			variables: {
-				first: PAGE_NUMBER,
-				after: endCursor || null,
+				last: PAGE_NUMBER,
+				before: startCursor || null,
 			},
 			updateQuery: (prev: SearchData, { fetchMoreResult }: { fetchMoreResult?: SearchData }) => {
 				if (!fetchMoreResult) return prev
@@ -49,6 +51,10 @@ export const IssuesSearch = ({ onChange }: IssuesSearchProps) => {
 		})
 	}
 
+	const handleOnClick = (number: number) => {
+		navigate(`/${number}`)
+	}
+
 	return (
 		<motion.div>
 			<Search onChange={handleSearch} placeholder={'Search by title, body ...'} />
@@ -58,9 +64,10 @@ export const IssuesSearch = ({ onChange }: IssuesSearchProps) => {
 					issues={issues}
 					loading={loading}
 					error={error}
-					endCursor={endCursor}
-					hasNextPage={hasNextPage}
+					startCursor={startCursor}
+					hasPreviousPage={hasPreviousPage}
 					loadMore={handleLoadMoreIssues}
+					onClick={handleOnClick}
 				/>
 			)}
 		</motion.div>

@@ -5,7 +5,12 @@ import { capitalize } from '../../utils/function'
 
 export const Filter = ({ title, isActive, borderColor, onClick }: FilterProps): ReactElement => {
 	return (
-		<div className={styles.wrapper} onClick={onClick} style={{ backgroundColor: `${isActive ? 'lavender' : 'white'}` }}>
+		<div
+			className={styles.wrapper}
+			onClick={onClick}
+			style={{
+				backgroundColor: isActive !== undefined ? `${isActive ? 'gray' : 'white'}` : undefined,
+			}}>
 			<div
 				className={styles.circle}
 				style={{

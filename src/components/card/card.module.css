@@ -1,11 +1,10 @@
 .wrapper {
-	display: grid;
-	grid-template-columns: 50px auto;
+	display: flex;
+	flex-direction: column;
 	padding: 20px;
 	margin-bottom: 20px;
 	background-color: white;
 	font-weight: bold;
-	align-items: center;
 	border-radius: 10px;
 }
 
@@ -13,11 +12,6 @@
 	cursor: pointer;
 }
 
-.circle {
-	display: inline-block;
-	width: 20px;
-	height: 20px;
-	border-style: solid;
-	border-width: 5px;
-	border-radius: 50%;
+.title {
+	margin: 20px;
 }
