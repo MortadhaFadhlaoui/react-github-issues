@@ -4,6 +4,11 @@ This is an example how to display react repository issues, search issue with tit
 
 It uses an example Github GraphQL server from [https://api.github.com/graphql](https://docs.github.com/en/graphql) as the endpoint.
 
+## Instructions
+
+- `yarn`
+- Add `.env` file and create you own access token so you can authenticate against github graphql API `REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN=*****YOUR_TOKEN_GOES_HERE*******`
+
 ## Technologies Used
 
 ```sh
@@ -17,6 +22,9 @@ Apollo client
 
 ## Available Scripts
 
-- `yarn install`: install dependencies
+- `yarn`: install dependencies
 - `yarn start`: start the webserver
-- `yarn webpack:start`: create build file via webpack using `ts-loader`
+- `yarn build`: create build file via webpack using `ts-loader`
+- `yarn test` : run testing based on jest framework
+- `yarn compile` : generates types
+- `yarn lint:fix` : format code using prettier and fix linting
