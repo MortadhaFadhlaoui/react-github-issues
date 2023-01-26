@@ -44,7 +44,7 @@ export const getIssueDetail = (variables: IssueDetailVars): IssueDetailResults =
 	const hasPreviousPage = data?.repository.issue.comments.pageInfo.hasPreviousPage || false
 	const startCursor = data?.repository.issue.comments.pageInfo.startCursor || ''
 	const comments = data?.repository.issue.comments.nodes || []
-	const issue =  data?{ ...data?.repository.issue, comments } :null
+	const issue = data ? { ...data?.repository.issue, comments } : null
 
 	return { loading, error, fetchMore, hasPreviousPage, startCursor, issue }
 }

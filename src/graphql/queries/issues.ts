@@ -10,7 +10,7 @@ export const GET_ISSUES = gql`
 					title
 					state
 					number
-					author{
+					author {
 						avatarUrl
 						login
 					}
@@ -39,7 +39,7 @@ export const SEARCH_ISSUES = gql`
 					title
 					number
 					state
-					author{
+					author {
 						avatarUrl
 						login
 					}
