@@ -1,7 +1,6 @@
 import { OperationVariables, ApolloError, FetchMoreQueryOptions, ApolloQueryResult } from '@apollo/client'
 import { IssueState } from './enums'
 
-// Data Types Section
 export interface Issue {
 	id: string
 	title: string
@@ -46,8 +45,6 @@ export interface SearchIssuesVars extends PaginationVars {
 export interface IssueDetailVars extends IssuesVars {
 	number: number
 }
-
-// API Type Section
 export interface Pagination<TData = unknown, TVariables = OperationVariables> {
 	fetchMore<TFetchData = TData, TFetchVars = TVariables>(
 		fetchMoreOptions: FetchMoreQueryOptions<TFetchVars, TFetchData> & {

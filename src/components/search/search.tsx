@@ -4,6 +4,7 @@ import { SearchProps } from './search.props'
 
 export const Search = ({ onChange, placeholder }: SearchProps): ReactElement => {
 	const [searchTerm, setSearchTerm] = useState('')
+
 	const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
 		if (searchTerm !== '' && event.key === 'Enter') {
 			onChange(searchTerm)

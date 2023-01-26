@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import styles from './filter.module.css'
 import { FilterProps } from './filter.props'
-import { capitalize } from '../../utils/function'
+import { capitalize } from '../../utils/functions/functions'
 
 export const Filter = ({ title, isActive, borderColor, onClick }: FilterProps): ReactElement => {
 	return (
