@@ -5,7 +5,7 @@ describe('functions file', () => {
 		expect(capitalize('test')).toBe('Test')
 	})
 
-  test('Capitalize string - Empty String', () => {
+	test('Capitalize string - Empty String', () => {
 		expect(capitalize('')).toBe('')
 	})
 })
